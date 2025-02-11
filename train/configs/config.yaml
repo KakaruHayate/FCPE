@@ -1,11 +1,11 @@
 data:
-  duration: 0.3483 # Audio duration during training, must be less than the duration of the shortest audio clip
-  train_path: 'yx2/train' # Create a folder named "audio" under this path and put the audio clip in it
-  valid_path: 'yx2/val' # Create a folder named "audio" under this path and put the audio clip in it
+  duration: 1.0 # Audio duration during training, must be less than the duration of the shortest audio clip
+  train_path: 'op/train' # Create a folder named "audio" under this path and put the audio clip in it
+  valid_path: 'op/val' # Create a folder named "audio" under this path and put the audio clip in it
   extensions: # List of extension included in the data collection
     - wav
 mel:
-  type: 'stft' # use "none" or "default" to use default
+  type: 'none' # use "none" or "default" to use default
   sr: 16000
   num_mels: 512 # if stft need to match others
   n_fft: 1024
@@ -14,13 +14,13 @@ mel:
   fmin: 0
   fmax: 8000
 model:
-  type: 'CFNaiveMelPE'
-  out_dims: 360
+  type: 'CFNaiveMelOPE'
+  out_dims: 256
   hidden_dims: 512
   n_layers: 6
   n_heads: 8
-  f0_min: 32.70
-  f0_max: 1975.5
+  f0_min: 0.0
+  f0_max: 1.0
   use_fa_norm: true
   conv_only: true
   conv_dropout: 0.0
@@ -30,17 +30,17 @@ loss:
   loss_scale: 10
 device: cuda
 env:
-  expdir: exp/yx2_001ac_stft
+  expdir: exp/op01_001
   gpu_id: 0
 train:
-  aug_add_music: true
-  aug_keyshift: true
+  aug_add_music: false
+  aug_keyshift: false
   f0_shift_mode: 'keyshift'
   keyshift_min: -6
   keyshift_max: 6
   aug_noise: true
-  noise_ratio: 0.7
-  brown_noise_ratio: 1
+  noise_ratio: 0.35
+  brown_noise_ratio: 0.5
   aug_mask: true
   aug_mask_v_o: true
   aug_mask_vertical_factor: 0.05
@@ -48,10 +48,10 @@ train:
   aug_mask_iszeropad_mode: 'noise' # randon zero or noise
   aug_mask_block_num: 1
   aug_mask_block_num_v_o: 1
-  num_workers: 14 # If your cpu and gpu are both very strong, set to 0 may be faster!
+  num_workers: 8 # If your cpu and gpu are both very strong, set to 0 may be faster!
   amp_dtype: fp32 # only can ues fp32, else nan
-  batch_size: 128
-  use_redis: true
+  batch_size: 64
+  use_redis: false
   cache_all_data: true # Save Internal-Memory or Graphics-Memory if it is false, but may be slow
   cache_device: 'cpu' # Set to 'cuda' to cache the data into the Graphics-Memory, fastest speed for strong gpu
   epochs: 100000
