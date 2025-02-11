@@ -87,7 +87,7 @@ def get_data_loaders(args, jump=False):
         f0_min=args.model.f0_min,
         f0_max=args.model.f0_max,
         f0_shift_mode='keyshift',
-        load_data_num_processes=8,
+        load_data_num_processes=1,
         use_redis=args.train.use_redis,
         jump=jump
     )
@@ -167,7 +167,7 @@ class F0Dataset(Dataset):
             jump=False
     ):
         super().__init__()
-        self.music_spk_id = 1
+        self.music_spk_id = 1999
         self.wav2mel = wav2mel
         self.waveform_sec = waveform_sec
         self.sample_rate = sample_rate
@@ -243,8 +243,12 @@ class F0Dataset(Dataset):
                 path_audio = os.path.join(self.path_root, 'audio', name_ext)
                 duration = librosa.get_duration(filename=path_audio, sr=self.sample_rate)
 
-                path_f0 = os.path.join(self.path_root, 'f0', name_ext) + '.npy'
+                path_f0 = os.path.join(self.path_root, 'ope', (name_ext[:-4])) + '.npy'
+                path_mask = os.path.join(self.path_root, 'mask', (name_ext[:-4])) + '.npy'
                 f0 = np.load(path_f0)[:, None]
+                mask = np.load(path_mask)
+                # 当mask为true时，f0为0
+                f0 = f0 * (~mask)[:, None]
                 # f0 = torch.from_numpy(f0).float().unsqueeze(-1).to(self.device)
 
                 if self.n_spk is not None and self.n_spk > 1:

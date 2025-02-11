@@ -10,7 +10,7 @@ from mir_eval.melody import raw_pitch_accuracy, to_cent_voicing, raw_chroma_accu
 from mir_eval.melody import voicing_recall, voicing_false_alarm
 import gc
 
-USE_MIR = True
+USE_MIR = False
 
 
 def test(args, model, loader_test, saver):

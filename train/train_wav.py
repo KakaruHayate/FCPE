@@ -4,7 +4,7 @@ from torch.optim import lr_scheduler
 from savertools import utils
 from data_loaders_wav import get_data_loaders
 from solver_wav import train
-import torchfcpe
+import torchfcope
 
 
 def parse_args(args=None, namespace=None):
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     print(' >    exp:', args.env.expdir)
 
     # load model
-    model = torchfcpe.spawn_model(args)
+    model = torchfcope.spawn_model(args)
 
     # load parameters
     optimizer = torch.optim.AdamW(model.parameters())
