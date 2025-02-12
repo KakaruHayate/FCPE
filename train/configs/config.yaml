@@ -1,4 +1,7 @@
 data:
+  fbl_onnx_path: pretrain/fbl_model/model_slim.onnx
+  mask_breath: false
+  ope_mode: 'mode3' # 1.'jawOpen' 2.'jawOpen - mouthClose' 3.'jawOpen * (1 - mouthClose)'
   duration: 1.0 # Audio duration during training, must be less than the duration of the shortest audio clip
   train_path: 'op/train' # Create a folder named "audio" under this path and put the audio clip in it
   valid_path: 'op/val' # Create a folder named "audio" under this path and put the audio clip in it
